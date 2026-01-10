@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff; /* White background */
+  --foreground: #000000; /* Black text */
+  --brown-accent: #80303F; /* Brown accent */
+  --brown-light: #f5e9ec; /* Light brown background */
+  --brown-border: #d4c1c6; /* Brown border */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-brown-accent: var(--brown-accent);
+  --color-brown-light: var(--brown-light);
+  --color-brown-border: var(--brown-border);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --brown-accent: #80303F;
+    --brown-light: #3a0020;
+    --brown-border: #5c0036;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Brown gradient button */
+.btn-brown-gradient {
+  background: linear-gradient(135deg, var(--brown-accent), #a54a5a);
+  border: 1px solid var(--brown-accent);
+  border-radius: 12px;
+  color: white;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-brown-gradient:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(128, 48, 63, 0.2);
+}
+
+/* Brown-white card styling */
+.card-brown-border {
+  background-color: white;
+  border: 1px solid var(--brown-accent);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.card-brown-border:hover {
+  box-shadow: 0 6px 12px rgba(128, 48, 63, 0.15);
+}
+
+/* Soft shadow */
+.soft-shadow {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Rounded corners */
+.rounded-container {
+  border-radius: 12px;
+}
