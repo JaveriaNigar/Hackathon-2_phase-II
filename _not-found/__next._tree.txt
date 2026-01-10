@@ -1,0 +1,2 @@
+:HL["/Hackathon-2_phase-II/_next/static/chunks/4a097d71b3a26a1c.css","style"]
+0:{"buildId":"CcLtdo6QaWfHKB-FTEwN9","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"/_not-found","paramType":null,"paramKey":"/_not-found","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":false}},"isRootLayout":true},"staleTime":300}
