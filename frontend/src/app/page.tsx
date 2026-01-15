@@ -32,21 +32,21 @@ export default function HomePage() {
         </div>
 
         <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          <div className="bg-white border border-brown-accent rounded-xl p-6 shadow-sm hover:shadow-lg transition-shadow duration-300">
+          <div className="bg-white border border-brown-accent rounded-xl p-6 shadow-sm hover:bg-[#eee0e3] transition-all duration-300">
             <h3 className="text-xl font-semibold text-brown-accent mb-3">Organize Tasks</h3>
             <p className="text-black">
               Create, update, and manage your tasks with our intuitive interface designed for productivity.
             </p>
           </div>
 
-          <div className="bg-white border border-brown-accent rounded-xl p-6 shadow-sm hover:shadow-lg transition-shadow duration-300">
+          <div className="bg-white border border-brown-accent rounded-xl p-6 shadow-sm hover:bg-[#eee0e3] transition-all duration-300">
             <h3 className="text-xl font-semibold text-brown-accent mb-3">Track Progress</h3>
             <p className="text-black">
               Monitor your daily and weekly progress at a glance to stay efficient and focused on what matters most.
             </p>
           </div>
 
-          <div className="bg-white border border-brown-accent rounded-xl p-6 shadow-sm hover:shadow-lg transition-shadow duration-300">
+          <div className="bg-white border border-brown-accent rounded-xl p-6 shadow-sm hover:bg-[#eee0e3] transition-all duration-300">
             <h3 className="text-xl font-semibold text-brown-accent mb-3">Secure Access</h3>
             <p className="text-black">
               Your tasks are protected with secure authentication and user isolation.
