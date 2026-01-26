@@ -1,10 +1,7 @@
 ---
-title: Hackathon Phase 03
-emoji: ⚡
-colorFrom: pink
+title: Todo AI Chatbot API
+emoji: 🚀
+colorFrom: blue
 colorTo: red
 sdk: docker
-pinned: false
 ---
-
-Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
