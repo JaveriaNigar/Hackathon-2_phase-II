@@ -34,9 +34,8 @@ def validate_password(password: str) -> Tuple[bool, str, str]:
         return False, f"Password must contain exactly 1 special character, but found {special_count}", password
 
     # Ensure the password is within bcrypt byte limit (72 bytes)
-    # Since our password is limited to 8 characters, this check will always pass
-    # But we include it for completeness and future-proofing
-    if len(password.encode('utf-8')) > 72:
-        return False, f"Password exceeds bcrypt byte limit of 72 bytes", password
+    # limit removed as per user request - handled by bcrypt truncation or frontend
+    # if len(password.encode('utf-8')) > 72:
+    #    return False, f"Password exceeds bcrypt byte limit of 72 bytes", password
 
     return True, "Password is valid", password
