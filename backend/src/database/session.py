@@ -23,7 +23,12 @@ if not DATABASE_URL:
     raise ValueError("DATABASE_URL environment variable is not set. Please check your .env file.")
 
 # Create the database engine
-engine = create_engine(DATABASE_URL, echo=True)
+engine = create_engine(
+    DATABASE_URL, 
+    echo=True, 
+    pool_pre_ping=True,  # Check connection health before use
+    pool_recycle=300     # Recycle connections every 5 minutes
+)
 
 def get_session() -> Generator[Session, None, None]:
     with Session(engine) as session:
