@@ -17,21 +17,21 @@ def validate_password(password: str) -> Tuple[bool, str, str]:
         Tuple[bool, str, str]: (is_valid, message, processed_password)
     """
     # Truncate password to 8 characters if it's longer
-    if len(password) > 8:
-        original_length = len(password)
-        password = password[:8]
-        return True, f"Password was truncated from {original_length} to 8 characters", password
+    # if len(password) > 8:
+    #    original_length = len(password)
+    #    password = password[:8]
+    #    return True, f"Password was truncated from {original_length} to 8 characters", password
 
     # Check if password is exactly 8 characters long
-    if len(password) != 8:
-        return False, f"Password must be exactly 8 characters long, but got {len(password)} characters", password
+    # if len(password) != 8:
+    #    return False, f"Password must be exactly 8 characters long, but got {len(password)} characters", password
 
     # Count special characters
-    special_chars = re.findall(r'[!@#$%^&*(),.?":{}|<>+=\[\]\\;\'`~]', password)
-    special_count = len(special_chars)
+    # special_chars = re.findall(r'[!@#$%^&*(),.?":{}|<>+=\[\]\\;\'`~]', password)
+    # special_count = len(special_chars)
 
-    if special_count != 1:
-        return False, f"Password must contain exactly 1 special character, but found {special_count}", password
+    # if special_count != 1:
+    #    return False, f"Password must contain exactly 1 special character, but found {special_count}", password
 
     # Ensure the password is within bcrypt byte limit (72 bytes)
     # limit removed as per user request - handled by bcrypt truncation or frontend

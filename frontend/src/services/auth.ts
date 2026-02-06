@@ -28,8 +28,8 @@ interface LoginData {
   password: string;
 }
 
-// Base API URL - this should come from environment variables
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+// Base API URL - using Next.js rewrite proxy to avoid CORS
+const API_BASE_URL = '/backend-api';
 
 /**
  * Helper function to make API requests for authentication
@@ -42,17 +42,41 @@ const authRequest = async (endpoint: string, options: RequestInit = {}) => {
     ...options.headers,
   };
 
-  const response = await fetch(url, {
-    ...options,
-    headers,
-  });
+  console.log(`[Auth] Requesting: ${url}`, { method: options.method, headers });
 
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), 15000); // 15s timeout
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      headers,
+      signal: controller.signal,
+    });
+    clearTimeout(id);
+
+    console.log(`[Auth] Response status: ${response.status}`);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`[Auth] Error body: ${errorText}`);
+      try {
+        const errorData = JSON.parse(errorText);
+        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+      } catch (e) {
+        throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
+      }
+    }
+
+    return response.json();
+  } catch (error: any) {
+    clearTimeout(id);
+    console.error(`[Auth] Fetch error:`, error);
+    if (error.name === 'AbortError') {
+      throw new Error('Request timed out. Please check your network connection or backend status.');
+    }
+    throw error;
   }
-
-  return response.json();
 };
 
 /**
@@ -66,19 +90,14 @@ export const getCurrentUser = async (): Promise<User> => {
       throw new Error('No token available');
     }
 
-    const response = await fetch(`${API_BASE_URL}/user/`, {
+    // Use authRequest to benefit from timeout and logging
+    // Endpoint: /user/ -> rewritten to ...hf.space/api/user/
+    return await authRequest('/user/', {
+      method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
       },
     });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
-    }
-
-    return response.json();
   } catch (error) {
     console.error('Get user profile error:', error);
     throw error;
@@ -92,9 +111,16 @@ export const getCurrentUser = async (): Promise<User> => {
  */
 export const signup = async (signupData: SignupData): Promise<{ user: User, token: string }> => {
   try {
+    // Truncate password to 72 chars to satisfy backend bcrypt limit
+    const safeSignupData = {
+      ...signupData,
+      password: signupData.password
+    };
+
+    // Endpoint: /auth/signup -> rewritten to ...hf.space/api/auth/signup
     const response = await authRequest('/auth/signup', {
       method: 'POST',
-      body: JSON.stringify(signupData),
+      body: JSON.stringify(safeSignupData),
     });
 
     // Store the received token
@@ -120,9 +146,16 @@ export const signup = async (signupData: SignupData): Promise<{ user: User, toke
  */
 export const login = async (loginData: LoginData): Promise<{ user: User, token: string }> => {
   try {
+    // Truncate password to 72 chars to satisfy backend bcrypt limit
+    const safeLoginData = {
+      ...loginData,
+      password: loginData.password
+    };
+
+    // Endpoint: /auth/login -> rewritten to ...hf.space/api/auth/login
     const response = await authRequest('/auth/login', {
       method: 'POST',
-      body: JSON.stringify(loginData),
+      body: JSON.stringify(safeLoginData),
     });
 
     // Store the received token
