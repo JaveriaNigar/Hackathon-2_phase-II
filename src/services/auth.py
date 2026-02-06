@@ -21,7 +21,7 @@ class AuthService:
         try:
             # Normalize email: strip whitespace and convert to lower case
             normalized_email = email.strip().lower()
-            
+
             user = session.exec(
                 select(User).where(User.email == normalized_email)
             ).first()
@@ -29,10 +29,20 @@ class AuthService:
             if not user:
                 return None
 
+            # Process the password the same way it was processed during registration
+            password_bytes = password.encode('utf-8')
+            if len(password_bytes) > 72:
+                # Apply the same transformation that was used during registration
+                import hashlib
+                password_hash_obj = hashlib.sha256(password_bytes)
+                processed_password = password_hash_obj.hexdigest()
+            else:
+                processed_password = password
+
             # Verify the password (hashed or plain-text fallback)
             is_valid = False
             try:
-                is_valid = pwd_context.verify(password, user.password_hash)
+                is_valid = pwd_context.verify(processed_password, user.password_hash)
             except Exception:
                 # Fallback for legacy plain-text passwords
                 is_valid = (user.password_hash == password)
@@ -51,7 +61,7 @@ class AuthService:
         try:
             # Normalize email: strip whitespace and convert to lower case
             normalized_email = user_create.email.strip().lower()
-            
+
             existing_user = session.exec(
                 select(User).where(User.email == normalized_email)
             ).first()
@@ -59,8 +69,20 @@ class AuthService:
             if existing_user:
                 raise ValueError("Email already registered. Please login.")
 
+            # Check if password exceeds bcrypt byte limit (72 bytes)
+            password_bytes = user_create.password.encode('utf-8')
+            if len(password_bytes) > 72:
+                # For passwords longer than 72 bytes, we'll use a cryptographic hash
+                # to reduce the length while preserving uniqueness
+                import hashlib
+                # Create a deterministic hash of the password that's less than 72 bytes
+                password_hash_obj = hashlib.sha256(password_bytes)
+                processed_password = password_hash_obj.hexdigest()
+            else:
+                processed_password = user_create.password
+            
             # Hash the password before storing
-            hashed_password = pwd_context.hash(user_create.password)
+            hashed_password = pwd_context.hash(processed_password)
 
             user = User(
                 email=normalized_email,
