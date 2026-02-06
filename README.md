@@ -13,3 +13,6 @@ pinned: false
 # Full Stack Todo - Backend
 
 This Space hosts the backend API for the Full Stack Todo application.
+
+## Updates
+- Fixed password length constraint (> 72 bytes) support.
