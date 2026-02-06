@@ -36,8 +36,8 @@ def on_startup():
 
 # Include API routes
 app.include_router(tasks.router, prefix="/api/{user_id}", tags=["tasks"])
-app.include_router(auth.router, tags=["auth"])
-app.include_router(user.router, tags=["user"])
+app.include_router(auth.router, prefix="/api", tags=["auth"])
+app.include_router(user.router, prefix="/api", tags=["user"])
 
 @app.get("/")
 def read_root():

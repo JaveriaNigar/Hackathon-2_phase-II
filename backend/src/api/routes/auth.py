@@ -22,6 +22,7 @@ class AuthResponse(BaseModel):
     message: str
     user_id: str
     email: str
+    username: str
     token: str
 
 @router.post("/signup", status_code=status.HTTP_201_CREATED, response_model=AuthResponse)
@@ -46,6 +47,7 @@ def signup(user_create: UserCreate, session: Session = Depends(get_session)):
             "message": "User registered successfully",
             "user_id": user.id,
             "email": user.email,
+            "username": user.name,
             "token": access_token
         }
     except ValueError as e:
@@ -90,6 +92,7 @@ def login(login_request: LoginRequest, session: Session = Depends(get_session)):
             "message": "Login successful",
             "user_id": user.id,
             "email": user.email,
+            "username": user.name,
             "token": access_token
         }
     except HTTPException:
